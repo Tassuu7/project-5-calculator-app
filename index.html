@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="calculator-app">
+    <div class="calculator" id="calculator-root">
+      <!-- Header: Mode Selector & Top Actions -->
+      <header class="calculator-header">
+        <nav class="mode-tabs" role="tablist" aria-label="Calculator Modes">
+          <button type="button" class="tab-btn active" data-mode="standard" role="tab" aria-selected="true">Standard</button>
+          <button type="button" class="tab-btn" data-mode="scientific" role="tab" aria-selected="false">Scientific</button>
+          <button type="button" class="tab-btn" data-mode="converter" role="tab" aria-selected="false">Converter</button>
+        </nav>
+
+        <div class="header-actions">
+          <button id="constants-toggle-btn" class="header-btn" type="button" title="Physical & Math Constants">
+            Constants
+          </button>
+          <button id="history-toggle-btn" class="header-btn" type="button" title="Toggle Calculation History">
+            History
+          </button>
+        </div>
+      </header>
+
+      <!-- CALCULATOR VIEW (Standard & Scientific) -->
+      <section id="calc-view" class="calc-view">
+        <!-- Display area -->
+        <section class="display-container" aria-label="Calculator display">
+          <div class="display-top-bar">
+            <span id="memory-indicator" class="status-badge" hidden>M</span>
+            <span id="angle-indicator" class="status-badge">DEG</span>
+            <div id="previous-operand" class="previous-operand" aria-live="polite"></div>
+          </div>
+          <div id="current-operand" class="current-operand" aria-live="assertive">0</div>
+        </section>
+
+        <!-- Memory Buttons Row -->
+        <div class="memory-bar" aria-label="Memory operations">
+          <button type="button" class="mem-btn" data-memory="mc" title="Memory Clear">MC</button>
+          <button type="button" class="mem-btn" data-memory="mr" title="Memory Recall">MR</button>
+          <button type="button" class="mem-btn" data-memory="m+" title="Memory Add">M+</button>
+          <button type="button" class="mem-btn" data-memory="m-" title="Memory Subtract">M−</button>
+          <button type="button" class="mem-btn" data-memory="ms" title="Memory Store">MS</button>
+        </div>
+
+        <!-- Scientific Function Keys (Visible in Scientific mode) -->
+        <div id="scientific-grid" class="scientific-grid" hidden>
+          <button type="button" class="btn btn-sci" id="angle-toggle-btn" title="Toggle Degrees / Radians">DEG</button>
+          <button type="button" class="btn btn-sci" data-sci="sin" title="Sine">sin</button>
+          <button type="button" class="btn btn-sci" data-sci="cos" title="Cosine">cos</button>
+          <button type="button" class="btn btn-sci" data-sci="tan" title="Tangent">tan</button>
+          <button type="button" class="btn btn-sci" data-sci="pi" title="Pi (3.14159...)">π</button>
+
+          <button type="button" class="btn btn-sci" data-sci="asin" title="Arcsine">sin⁻¹</button>
+          <button type="button" class="btn btn-sci" data-sci="acos" title="Arccosine">cos⁻¹</button>
+          <button type="button" class="btn btn-sci" data-sci="atan" title="Arctangent">tan⁻¹</button>
+          <button type="button" class="btn btn-sci" data-sci="ln" title="Natural Logarithm">ln</button>
+          <button type="button" class="btn btn-sci" data-sci="e" title="Euler's constant (2.71828...)">e</button>
+
+          <button type="button" class="btn btn-sci" data-sci="(" title="Left Parenthesis">(</button>
+          <button type="button" class="btn btn-sci" data-sci=")" title="Right Parenthesis">)</button>
+          <button type="button" class="btn btn-sci" data-sci="sqrt" title="Square Root">√</button>
+          <button type="button" class="btn btn-sci" data-sci="pow" title="Power (x^y)">xʸ</button>
+          <button type="button" class="btn btn-sci" data-sci="sqr" title="Square (x²)">x²</button>
+
+          <button type="button" class="btn btn-sci" data-sci="fact" title="Factorial (n!)">n!</button>
+          <button type="button" class="btn btn-sci" data-sci="log" title="Logarithm (base 10)">log</button>
+          <button type="button" class="btn btn-sci" data-sci="inv" title="Reciprocal (1/x)">1/x</button>
+          <button type="button" class="btn btn-sci" data-sci="abs" title="Absolute value (|x|)">|x|</button>
+          <button type="button" class="btn btn-sci" data-sci="exp" title="Exponential (eˣ)">eˣ</button>
+        </div>
+
+        <!-- Standard Keypad -->
+        <section class="keypad" aria-label="Standard keypad">
+          <!-- Row 1 -->
+          <button type="button" class="btn btn-action" data-action="clear" title="Clear (Esc)">AC</button>
+          <button type="button" class="btn btn-action" data-action="backspace" title="Backspace (Backspace)">DEL</button>
+          <button type="button" class="btn btn-action" data-action="percent" title="Percent (%)">%</button>
+          <button type="button" class="btn btn-operator" data-operator="÷" title="Divide (/)">÷</button>
+
+          <!-- Row 2 -->
+          <button type="button" class="btn btn-number" data-number="7">7</button>
+          <button type="button" class="btn btn-number" data-number="8">8</button>
+          <button type="button" class="btn btn-number" data-number="9">9</button>
+          <button type="button" class="btn btn-operator" data-operator="×" title="Multiply (*)">×</button>
+
+          <!-- Row 3 -->
+          <button type="button" class="btn btn-number" data-number="4">4</button>
+          <button type="button" class="btn btn-number" data-number="5">5</button>
+          <button type="button" class="btn btn-number" data-number="6">6</button>
+          <button type="button" class="btn btn-operator" data-operator="-" title="Subtract (-)">−</button>
+
+          <!-- Row 4 -->
+          <button type="button" class="btn btn-number" data-number="1">1</button>
+          <button type="button" class="btn btn-number" data-number="2">2</button>
+          <button type="button" class="btn btn-number" data-number="3">3</button>
+          <button type="button" class="btn btn-operator" data-operator="+" title="Add (+)">+</button>
+
+          <!-- Row 5 -->
+          <button type="button" class="btn btn-action" data-action="negate" title="Plus/Minus">±</button>
+          <button type="button" class="btn btn-number" data-number="0">0</button>
+          <button type="button" class="btn btn-number" data-number=".">.</button>
+          <button type="button" class="btn btn-equals" data-action="equals" title="Equals (Enter)">=</button>
+        </section>
+      </section>
+
+      <!-- CONVERTER VIEW -->
+      <section id="converter-view" class="converter-view" hidden>
+        <div class="converter-group">
+          <label for="converter-category" class="converter-label">Category</label>
+          <select id="converter-category" class="converter-select"></select>
+        </div>
+
+        <div class="converter-cards">
+          <!-- From Unit -->
+          <div class="converter-card">
+            <span class="converter-card-title">From</span>
+            <input type="number" id="converter-from-value" class="converter-input" value="1" step="any">
+            <select id="converter-from-unit" class="converter-select"></select>
+          </div>
+
+          <div class="converter-swap-wrapper">
+            <button type="button" id="converter-swap-btn" class="converter-swap-btn" title="Swap Units">⇄</button>
+          </div>
+
+          <!-- To Unit -->
+          <div class="converter-card">
+            <span class="converter-card-title">To</span>
+            <input type="text" id="converter-to-value" class="converter-input" readonly value="0">
+            <select id="converter-to-unit" class="converter-select"></select>
+          </div>
+        </div>
+
+        <div id="converter-formula" class="converter-formula"></div>
+      </section>
+
+      <!-- CONSTANTS MODAL / PANEL -->
+      <aside id="constants-panel" class="modal-panel" aria-label="Scientific Constants" hidden>
+        <div class="panel-header">
+          <span>Physical & Math Constants</span>
+          <button type="button" id="close-constants-btn" class="panel-close-btn">&times;</button>
+        </div>
+        <div class="constants-search-box">
+          <input type="text" id="constants-search" placeholder="Search constant or symbol..." class="search-input">
+        </div>
+        <ul id="constants-list" class="constants-list"></ul>
+      </aside>
+
+      <!-- HISTORY PANEL -->
+      <aside id="history-panel" class="modal-panel" aria-label="Calculation history" hidden>
+        <div class="panel-header">
+          <span>Calculation History</span>
+          <div class="history-actions">
+            <button id="export-history-btn" class="text-btn" type="button" title="Export as text">Export</button>
+            <button id="clear-history-btn" class="text-btn text-btn-danger" type="button" title="Clear all history">Clear</button>
+            <button type="button" id="close-history-btn" class="panel-close-btn">&times;</button>
+          </div>
+        </div>
+        <ul id="history-list" class="history-list">
+          <li class="history-empty">No calculations yet</li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <script src="constants.js"></script>
+  <script src="units.js"></script>
+  <script src="scientific.js"></script>
+  <script src="memory.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
